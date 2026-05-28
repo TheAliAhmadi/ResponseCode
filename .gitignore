@@ -30,4 +30,5 @@ worker/.dev.vars
 *.sqlite
 *.sqlite3
 pair_judgments.csv
-
+/docs
+/draw-io-diagram-generator/
