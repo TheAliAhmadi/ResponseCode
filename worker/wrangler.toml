@@ -1,0 +1,17 @@
+name = "pair-reviewer-api"
+main = "src/index.ts"
+compatibility_date = "2026-05-27"
+workers_dev = true
+
+[vars]
+APP_MODE = "dev"
+DEV_REVIEWER_EMAIL = ""
+ADMIN_EMAILS = ""
+
+# Replace these with your real D1 IDs after running: wrangler d1 create pair-reviewer-db
+[[d1_databases]]
+binding = "DB"
+database_name = "pair-reviewer-db"
+database_id = "00000000-0000-0000-0000-000000000000"
+preview_database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"

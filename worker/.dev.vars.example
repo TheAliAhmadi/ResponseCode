@@ -1,0 +1,4 @@
+# Copy to .dev.vars for local wrangler development.
+APP_MODE=dev
+DEV_REVIEWER_EMAIL=
+ADMIN_EMAILS=

@@ -1,0 +1,222 @@
+You are helping me build a local web app to inspect candidate competitive-response pairs.
+
+Goal:
+Create a clean local browser app that lets me visually inspect focal-event to candidate-response-event pairs side by side, so I can judge whether the candidate event is actually a competitive response.
+
+This app should NOT:
+- generate new pairs
+- calculate embeddings
+- call OpenAI or any API
+- modify the original master database
+- run the response-matching algorithm
+
+It should only load existing pair files and master event data, then display them clearly for human review.
+
+Data paths:
+
+MASTER_DB_PATH = "/Users/aliahmadi/Surprise/Data/NewsCatcher_Alt_Sample/ResponseTime/data/master_data/master_data.db"
+PAIRS_PATH = "/Users/aliahmadi/Surprise/Data/NewsCatcher_Alt_Sample/ResponseTime/data/Pairs/v2/candidate_response_pairs_all_parts"
+
+If the pairs are in a single file instead of a folder, make PAIRS_PATH easy to change.
+
+CACHE_DIR = "/Users/aliahmadi/Surprise/Data/NewsCatcher_Alt_Sample/ResponseTime/data/App"
+
+The master database table is likely called:
+
+master_data
+
+If not, inspect the database, print available table names, and use the appropriate one.
+
+The pairs parquet files include columns like:
+
+focal_master_id
+candidate_master_id
+focal_article_id
+candidate_article_id
+focal_gvkey
+responder_gvkey
+rival_rank
+focal_date
+candidate_date
+delay_days
+cosine_similarity
+focal_action
+candidate_action
+focal_sic
+candidate_sic
+same_sic
+same_action
+focal_title
+candidate_title
+focal_competitive_surprise
+candidate_competitive_surprise
+focal_is_surprise
+candidate_is_surprise
+focal_dataset_type
+candidate_dataset_type
+focal_confidence
+candidate_confidence
+
+The master database includes event-level fields such as:
+
+master_id
+article_id
+id
+title
+published_date
+name_source
+domain_url
+link
+description
+content
+gvkey
+conm
+sic
+primary_action_type
+action
+competitive_surprise
+surprise_score
+surprise_type
+surprise_element
+surprising_quote
+is_surprise
+dataset_type
+is_usable
+action_summary_1200
+competitive_move
+product_service_terms
+market_domain_terms
+technology_terms
+geography_terms
+customer_segment_terms
+strategic_purpose
+company_name
+company_ticker
+
+Core app requirements:
+
+1. Load candidate response pairs from PAIRS_PATH.
+   - Support parquet file or folder of parquet parts.
+   - Do not load more data than needed for the current view if the file is large.
+   - Use efficient caching.
+
+2. Load master event details from MASTER_DB_PATH.
+   - Use master_id to retrieve full details for both focal_master_id and candidate_master_id.
+   - Cache only the fields needed for display.
+   - Do not repeatedly query the full database unnecessarily.
+
+3. Main interface:
+   - Show one pair at a time.
+   - Display the focal event on the left and candidate response event on the right.
+   - Show key metadata at the top.
+   - Show readable text below.
+
+4. For each side, display:
+   - title
+   - company name / gvkey
+   - date
+   - source
+   - action type
+   - SIC
+   - dataset type
+   - competitive surprise flag
+   - surprise type if available
+   - action_summary_1200
+   - competitive_move
+   - product / market / technology / geography terms
+   - strategic purpose
+   - description
+   - content preview
+   - article link if available
+
+5. For the pair itself, display:
+   - cosine similarity
+   - delay days
+   - rival rank
+   - same_sic
+   - same_action
+   - focal and responder gvkeys
+   - focal and candidate actions
+
+6. Add simple filters:
+   - cosine similarity range
+   - delay days range
+   - focal competitive surprise flag
+   - candidate competitive surprise flag
+   - focal action type
+   - candidate action type
+   - same_sic
+   - same_action
+   - rival rank
+   - dataset type
+   - text search across titles and summaries
+
+7. Add sorting:
+   - highest cosine similarity
+   - lowest cosine similarity
+   - shortest delay
+   - longest delay
+   - random order
+
+8. Add human coding controls.
+
+For each pair, I want to be able to assign one label:
+
+DIRECT_RESPONSE
+PLAUSIBLE_RESPONSE
+COMMON_SHOCK
+UNRELATED
+INSUFFICIENT_EVIDENCE
+SKIP
+
+Also allow:
+- confidence score from 1 to 5
+- optional notes
+- save judgment
+- move to next pair
+- go back to previous pair
+
+9. Save human judgments locally.
+
+Save to:
+
+CACHE_DIR + "/pair_judgments.csv"
+
+or a small SQLite file if that is easier.
+
+The saved judgment file should include:
+
+focal_master_id
+candidate_master_id
+cosine_similarity
+delay_days
+label
+confidence
+notes
+timestamp
+
+The app should preserve previous judgments when reopened.
+
+10. Make the app pleasant and readable.
+
+Use a clean, modern interface.
+Make the side-by-side comparison easy to read.
+Use visual badges for surprise flags, same SIC, same action, and labels.
+Use expandable sections for long content.
+Do not clutter the screen.
+
+You may choose the best local web framework for this project, such as Streamlit, Dash, or FastAPI with a lightweight frontend. Choose the option that is easiest to run locally and maintain.
+
+11. Provide clear run instructions.
+
+At the end, tell me:
+- what files were created
+- how to install dependencies
+- how to run the app
+- what URL to open in the browser
+- where judgments are saved
+
+Important:
+The app is for human inspection and validation. It should help me decide whether a candidate pair is a real competitive response. It should not pretend the pairs are already confirmed responses.
+
+Build the app in a clean, simple, maintainable way.
