@@ -30,9 +30,7 @@ Other files:
 ## Data sources and how they are built
 
 ### Source pairs (Parquet)
-The raw pairs live here (large Parquet dataset):
-
-/Users/aliahmadi/Surprise/Data/NewsCatcher_Alt_Sample/ResponseTime/data/Pairs_and_similarity/v2/candidate_response_pairs_all_parts
+The raw pairs live here (large Parquet dataset): candidate_response_pairs_all_parts
 
 This is the full corpus of candidate-response pairs with similarity scores and metadata.
 
@@ -53,12 +51,12 @@ python setup.py --limit 20000 --stratified --bins 10
 
 The output DB always lives here:
 
-/Users/aliahmadi/Surprise/Data/NewsCatcher_Alt_Sample/ResponseTime/data/App/working_pairs.db
+ResponseTime/data/App/working_pairs.db
 
 ### Master event database
 The API also looks up full event details from:
 
-/Users/aliahmadi/Surprise/Data/NewsCatcher_Alt_Sample/ResponseTime/data/master_data/master_data.db
+ResponseTime/data/master_data/master_data.db
 
 The backend only reads this file. It is not modified.
 
